@@ -83,10 +83,10 @@ function($, _, Lacuna, Library, BuildingType, Template, Body, Queue, TmplMapPlan
                 module: '/body',
                 method: 'get_buildings',
 
-                params: [
-                    Lacuna.getSession(), // Session Id
-                    bodyId               // Body Id
-                ]
+                params: [{
+                    session_id  : Lacuna.getSession(),
+                    body_id     : bodyId
+                }]
             });
 
             deferredGetBuildings.done(scope.loadBuildings);
@@ -98,8 +98,8 @@ function($, _, Lacuna, Library, BuildingType, Template, Body, Queue, TmplMapPlan
             if (_.size(scope.buildings) === 0) {
                 
                 // Loop.. and... update!
-                _.each(o.result.buildings, function(item, key) {
-                    scope.updateBuilding(item, key);
+                _.each(o.result.buildings, function(item) {
+                    scope.updateBuilding(item);
                 });
 
                 scope.finishPlanetView();
@@ -109,12 +109,11 @@ function($, _, Lacuna, Library, BuildingType, Template, Body, Queue, TmplMapPlan
             }
         };
 
-        scope.updateBuilding = function(building, id) {
+        scope.updateBuilding = function(building) {
             var idStr      = scope.getIdStr(building.x, building.y),
                 buildingEl = $('#' + idStr);
             
             // Add some interesting things to the building.
-            building.id    = building.id || id;
             building.idStr = idStr;
             building.idStrCenter = idStr + '_center';
             building.idStrCounter = idStr + '_counter';
